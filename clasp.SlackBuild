@@ -39,9 +39,9 @@ if [ -z "$ARCH" ]; then
 fi
 
 CWD=$(pwd)
-TMP=${TMP:-/tmp/SBo}	# For consistency's sake, use this
+TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}	# Drop the package in /tmp
+OUTPUT=${OUTPUT:-/tmp}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
@@ -99,19 +99,9 @@ CXXFLAGS="$SLKCFLAGS"                    \
 
 # Don't need to strip binaries, took care of that in configure script
 
-# Compress man pages
-# If the man pages are installed to /usr/share/man instead, you'll need to either
-# add the --mandir=/usr/man flag to configure or move them manually after the
-# make install process is run.
+# Compress man pages (no-op since clasp doesn't have a man page)
 find "${PKG}/usr/man" -type f -exec gzip -9 {} \;
 for i in $( find "${PKG}/usr/man" -type l ) ; do ln -s "$( readlink "$i" ).gz" "${i}.gz" ; rm "$i" ; done
-
-# Compress info pages and remove the package's dir file
-# If no info pages are installed by the software, don't leave this in the script
-rm -f "$PKG/usr/info/dir"
-set +f
-gzip -9 "${PKG}/usr/info/"*.info*
-set -f
 
 # skipping perl cleanup steps, not a perl package
 
