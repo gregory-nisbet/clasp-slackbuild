@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|' on
+# the right side marks the last column you can put a character in.  You must make
+# exactly 11 lines for the formatting to be correct.  It's also customary to
+# leave one space after the ':'.
+
+     |-----handy-ruler------------------------------------------------------|
+clasp: clasp (an answer set solver for logic programs)
+clasp:
+clasp: clasp is an answer set solver for (extended) normal and disjunctive
+clasp: logic programs. It combines the high-level modeling capacities of ASP
+clasp: with state-of-the-art techniques from the area of Boolean constraint
+clasp: solving. The primary clasp algorithm relies on conflict-driven nogood
+clasp: learning, a technique that proved very successful for satisfiability
+clasp: checking (SAT).
+clasp:
+clasp: http://potassco.sourceforge.net/
+clasp:
