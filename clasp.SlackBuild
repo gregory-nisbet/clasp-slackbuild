@@ -109,7 +109,9 @@ for i in $( find "${PKG}/usr/man" -type l ) ; do ln -s "$( readlink "$i" ).gz" "
 # Compress info pages and remove the package's dir file
 # If no info pages are installed by the software, don't leave this in the script
 rm -f "$PKG/usr/info/dir"
+set +f
 gzip -9 "${PKG}/usr/info/"*.info*
+set -f
 
 # skipping perl cleanup steps, not a perl package
 
