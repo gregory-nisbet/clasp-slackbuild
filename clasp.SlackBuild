@@ -2,7 +2,7 @@
 
 # Slackware build script for clasp
 
-# Copyright 2016 Gregory Nisbet, California
+# Copyright 2016 Gregory Nisbet, Menlo Park, California
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -68,7 +68,7 @@ cd "$TMP"
 # remove unpackaged source folder if it exists
 rm -rf "${PRGNAM}-${VERSION}"
 # unpack source folder
-tar -xvf "${CWD}/${PRGNAM}-${VERSION}".tar.gz
+tar -xvf "${CWD}/${PRGNAM}-${VERSION}-source".tar.gz
 # cd into source folder
 cd "${PRGNAM}-${VERSION}"
 # change the permissions of a whole bunch of things
@@ -99,21 +99,11 @@ CXXFLAGS="$SLKCFLAGS"                    \
 
 # Don't need to strip binaries, took care of that in configure script
 
-# Compress man pages (no-op since clasp doesn't have a man page)
-find "${PKG}/usr/man" -type f -exec gzip -9 {} \;
-for i in $( find "${PKG}/usr/man" -type l ) ; do ln -s "$( readlink "$i" ).gz" "${i}.gz" ; rm "$i" ; done
+# clasp doesn't have a man page
 
 # skipping perl cleanup steps, not a perl package
 
-# Copy program documentation into the package
-# The included documentation varies from one application to another, so be sure
-# to adjust your script as needed
-# Also, include the SlackBuild script in the documentation directory
-mkdir -p "${PKG}/usr/doc/${PRGNAM}-${VERSION}"
-cp -a \
-  <documentation> \
-  "${PKG}/usr/doc/${PRGNAM}-${VERSION}"
-cat "${CWD}/${PRGNAM}.SlackBuild" > "${PKG}/usr/doc/${PRGNAM}-${VERSION}/${PRGNAM}.SlackBuild"
+# cat "${CWD}/${PRGNAM}.SlackBuild" > "${PKG}/usr/doc/${PRGNAM}-${VERSION}/${PRGNAM}.SlackBuild"
 
 # Copy the slack-desc (and a custom doinst.sh if necessary) into ./install
 mkdir -p "${PKG}/install"
