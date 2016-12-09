@@ -1,5 +1,3 @@
-clasp
-
 clasp is an answer set solver for (extended) normal and disjunctive logic programs.
 It combines the high-level modeling capacities of ASP with state-of-the-art techniques
 from the area of Boolean constraint solving. The primary clasp algorithm relies on
