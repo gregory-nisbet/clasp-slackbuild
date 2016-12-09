@@ -8,7 +8,7 @@ TO_BUNDLE      := clasp.SlackBuild clasp.info slack-desc README
 
 all: $(CLASP_TGZ) $(CLASP_TAR_GZ)
 
-# make submission for slakcbuilds.com
+# make submission for slakcbuilds.org
 $(CLASP_TAR_GZ): $(CLASP_TGZ)
 	mkdir clasp
 	cp $(TO_BUNDLE) clasp
