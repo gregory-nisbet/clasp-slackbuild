@@ -28,12 +28,10 @@ VERSION=${VERSION:-3.1.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
-# Automatically determine the architecture we're building on:
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
     i?86) ARCH=i586 ;;
     arm*) ARCH=arm ;;
-    # Unless $ARCH is already set, use uname -m for all other archs:
        *) ARCH=$( uname -m ) ;;
   esac
 fi
@@ -57,21 +55,14 @@ else
   LIBDIRSUFFIX=""
 fi
 
-set -euf
+set -e
 
-# clear package unpacking area
-rm -rf "$PKG"
-# make scratch space, unpacking area, output directory
-mkdir -p "$TMP" "$PKG" "$OUTPUT"
-# go to temporary directory
-cd "$TMP"
-# remove unpackaged source folder if it exists
-rm -rf "${PRGNAM}-${VERSION}"
-# unpack source folder
-tar -xvf "${CWD}/${PRGNAM}-${VERSION}-source".tar.gz
-# cd into source folder
-cd "${PRGNAM}-${VERSION}"
-# change the permissions of a whole bunch of things
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION-source.tar.gz
+cd $PRGNAM-$VERSION
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
@@ -79,40 +70,22 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
+./configure.sh \
+  --strip \
+  --config=sbo \
+  CXXFLAGS="$SLKCFLAGS"
 
-# how do I specify the architecture here?
-CFLAGS="$SLKCFLAGS"                      \
-CXXFLAGS="$SLKCFLAGS"                    \
-./configure.sh                           \
-  --prefix=/usr                          \
-  --config=release                       \
-  --strip
+cd build/sbo
+  make
+  install -m755 -D bin/clasp $PKG/usr/bin/clasp
+cd -
 
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a CHANGES COPYING README $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
 
-# Compile the application and install it into the $PKG directory
-(
-    cd build/release
-    make
-    make install
-)
-
-# Don't need to strip binaries, took care of that in configure script
-
-# clasp doesn't have a man page
-
-# skipping perl cleanup steps, not a perl package
-
-# cat "${CWD}/${PRGNAM}.SlackBuild" > "${PKG}/usr/doc/${PRGNAM}-${VERSION}/${PRGNAM}.SlackBuild"
-
-# Copy the slack-desc (and a custom doinst.sh if necessary) into ./install
-mkdir -p "${PKG}/install"
-cat "${CWD}/slack-desc" > "${PKG}/install/slack-desc"
-# cat "${CWD}/doinst.sh" > "${PKG}/install/doinst.sh"
-
-# Make the package; be sure to leave it in $OUTPUT
-# If package symlinks need to be created during install *before*
-# your custom contents of doinst.sh runs, then add the -p switch to
-# the makepkg command below -- see makepkg(8) for details
-cd "$PKG"
-/sbin/makepkg -l y -c n "${OUTPUT}/${PRGNAM}-${VERSION}-${ARCH}-${BUILD}${TAG}.${PKGTYPE:-tgz}"
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
