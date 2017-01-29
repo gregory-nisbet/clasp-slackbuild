@@ -57,9 +57,6 @@ fi
 
 set -e
 
-#TODO: remove me
-set -x
-
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
