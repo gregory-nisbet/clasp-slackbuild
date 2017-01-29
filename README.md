@@ -1,18 +1,48 @@
 # clasp-slackbuild
-Slackbuild for clasp
+Slackbuild for Clasp
 
-This is a work-in-progress slackbuild for clasp. Any feedback is much appreciated!
+installation instructions:
 
-The text for the description of clasp is taken from http://potassco.sourceforge.net/.
-I don't know what license the information on the site is released under, or the normal
-procedure for adding a description for slackbuilds.
+Slackbuilds are kind of tricky to understand the first time around.
 
-This slackbuild is based on the autotools template from slackbuilds.org
-https://slackbuilds.org/templates/autotools-template.SlackBuild
+The Slackbuild executable script creates an archive with the right permissions
+and owners and paths in /tmp.
 
-The process goes something like this:
+This archive is in the format that the lower-level installpkg tool expects. 
+`installpkg` is a shell script that's part of Slackware.
+It takes an archive (.tar, .tgz, and a few others)
 
-    ./configure.sh
-    cd build/release
-    make
-    make install
+The archive created by the slackbuild script has a formulaic name
+with information like the package name, the version, the architecture, etc.
+
+```
+    Slackware package /tmp/clasp-3.1.1-x86f_64-1_SBo.tgz created.
+```
+
+Looking at the contents, we can see stuff
+
+```
+    $ tar -tf clasp-3.1.1-x86_64-1_SBo.tgz 
+    ./
+    usr/
+    usr/doc/
+    usr/doc/clasp-3.1.1/
+    usr/doc/clasp-3.1.1/COPYING
+    usr/doc/clasp-3.1.1/README
+    usr/doc/clasp-3.1.1/CHANGES
+    usr/doc/clasp-3.1.1/clasp.SlackBuild
+    usr/bin/
+    usr/bin/clasp
+    install/
+    install/slack-desc
+```
+
+(as root)
+
+```
+    # ./clasp.SlackBuild
+    ...
+    ...
+    Slackware package /tmp/clasp-3.1.1-x86_64-1_SBo.tgz created.
+    # installpkg /tmp/clasp-3.1.1-x86_64-1_SBo.tgz
+```
