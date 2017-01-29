@@ -1,25 +1,12 @@
-.SUFFIXES:
-
-SHELL          := bash
-EDITOR_BACKUPS := $(wildcard *~)
-CLASP_TGZ      := clasp-3.1.1.tgz
-CLASP_TAR_GZ   := clasp.tar.gz
-TO_BUNDLE      := clasp.SlackBuild clasp.info slack-desc README
-
-all: $(CLASP_TGZ) $(CLASP_TAR_GZ)
+clasp_tgz := clasp-3.1.1.tar.gz
+sources   := clasp.SlackBuild clasp.info slack-desc README
 
 # make submission for slakcbuilds.org
-$(CLASP_TAR_GZ): $(CLASP_TGZ)
+$(clasp_tgz): $(sources)
 	mkdir clasp
-	cp $(TO_BUNDLE) clasp
-	tar -cvzf $(CLASP_TAR_GZ) $(addprefix clasp/,$(TO_BUNDLE))
+	cp $^ clasp
+	tar -cvzf $@ $(addprefix clasp/,$^)
 	$(RM) -rf clasp
 
-# make tgz
-$(CLASP_TGZ): $(TO_BUNDLE)
-	$(RM) $(CLASP_TGZ)
-	tar -cvzf $(CLASP_TGZ) $(TO_BUNDLE)	
-
 clean:
-	$(RM) $(CLASP_TGZ) $(CLASP_TAR_GZ)
-	$(RM) $(EDITOR_BACKUPS)
+	$(RM) -rf $(clasp_tgz) clasp
