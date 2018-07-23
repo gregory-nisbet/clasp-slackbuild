@@ -88,7 +88,7 @@ cd build
   # CMake release mode strips at install time
   # we need to strip the executable just after it has been
   # produced
-  find bin/clasp -type f -executable -print -exec strip '{}' \;
+  find bin -type f -executable -print -exec strip '{}' \;
   install -m755 -D bin/clasp $PKG/usr/bin/clasp
 cd -
 
