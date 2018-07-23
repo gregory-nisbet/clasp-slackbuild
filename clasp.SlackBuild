@@ -2,7 +2,7 @@
 
 # Slackware build script for clasp
 
-# Copyright 2016 Gregory Nisbet, Menlo Park, California
+# Copyright 2018 Gregory Nisbet, Menlo Park, California
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -24,7 +24,7 @@
 
 
 PRGNAM=clasp
-VERSION=${VERSION:-3.1.1}
+VERSION=${VERSION:-3.2.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -70,18 +70,19 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-./configure.sh \
+CLFAGS="$SLKCFLAGS" CXXFLAGS="$SLKCXXFLAGS" ./configure.sh \
   --strip \
-  --config=sbo \
-  CXXFLAGS="$SLKCFLAGS"
+  --config=release \
+  --prefix=/usr \
+  --bindir=/usr/bin
 
-cd build/sbo
+cd build/release
   make
   install -m755 -D bin/clasp $PKG/usr/bin/clasp
 cd -
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a CHANGES COPYING README $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a README $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
