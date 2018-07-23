@@ -24,7 +24,7 @@
 
 
 PRGNAM=clasp
-VERSION=${VERSION:-3.2.0}
+VERSION=${VERSION:-3.3.4}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -70,24 +70,30 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-# configure.sh allows a CXXFLAGS argument, but seems to ignore it.
-# CXXFLAGS repeated here for explicitness.
-./configure.sh \
-  --strip \
-  --config=release \
-  --prefix=/usr \
-  --bindir=/usr/bin \
-  CXXFLAGS="$SLKCFLAGS"
+mkdir -p build
+cd build
+  cmake \
+    -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \
+    -DCMAKE_CXX_FLAGS:STRING="$SLKCFLAGS" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DMAN_INSTALL_DIR=/usr/man \
+    -DLIB_SUFFIX=${LIBDIRSUFFIX} \
+    -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
+    ..
+  make
+cd -
 
-cd build/release
-  # do not allow the package to overrule our CFLAGS/CXXFLAGS
-  # build expects a value {0,1} for preprocessor var WITH_THREADS
-  make CXXFLAGS="-DWITH_THREADS=0 $SLKCFLAGS"
+cd build
+  # CMake release mode strips at install time
+  # we need to strip the executable just after it has been
+  # produced
+  find bin/clasp -type f -executable -print -exec strip '{}' \;
   install -m755 -D bin/clasp $PKG/usr/bin/clasp
 cd -
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a README $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a $CWD/README $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install
