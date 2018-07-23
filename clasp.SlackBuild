@@ -2,7 +2,7 @@
 
 # Slackware build script for clasp
 
-# Copyright 2018 Gregory Nisbet, Menlo Park, California
+# Copyright 2016 Gregory Nisbet, Menlo Park, California
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -70,14 +70,19 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-CLFAGS="$SLKCFLAGS" CXXFLAGS="$SLKCXXFLAGS" ./configure.sh \
+# configure.sh allows a CXXFLAGS argument, but seems to ignore it.
+# CXXFLAGS repeated here for explicitness.
+./configure.sh \
   --strip \
   --config=release \
   --prefix=/usr \
-  --bindir=/usr/bin
+  --bindir=/usr/bin \
+  CXXFLAGS="$SLKCFLAGS"
 
 cd build/release
-  make
+  # do not allow the package to overrule our CFLAGS/CXXFLAGS
+  # build expects a value {0,1} for preprocessor var WITH_THREADS
+  make CXXFLAGS="-DWITH_THREADS=0 $SLKCFLAGS"
   install -m755 -D bin/clasp $PKG/usr/bin/clasp
 cd -
 
