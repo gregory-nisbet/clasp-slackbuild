@@ -82,14 +82,11 @@ cd build
     -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
     ..
   make
-cd -
+  make install DESTDIR=$PKG
+cd ..
 
-cd build
-  # CMake release mode does not automatically strip binaries at build time.
-  # We need to strip the executable just after it has been produced.
-  find bin -type f -executable -print -exec strip '{}' \;
-  install -m755 -D bin/clasp $PKG/usr/bin/clasp
-cd -
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a $CWD/README $PKG/usr/doc/$PRGNAM-$VERSION
