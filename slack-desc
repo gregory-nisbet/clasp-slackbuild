@@ -15,5 +15,5 @@ clasp: solving. The primary clasp algorithm relies on conflict-driven nogood
 clasp: learning, a technique that proved very successful for satisfiability
 clasp: checking (SAT).
 clasp:
-clasp: http://potassco.sourceforge.net/
+clasp: https://potassco.sourceforge.net/clasp/
 clasp:
