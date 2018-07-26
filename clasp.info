@@ -1,6 +1,6 @@
 PRGNAM="clasp"
 VERSION="3.3.4"
-HOMEPAGE="https://potassco.org/"
+HOMEPAGE="https://potassco.org/clasp/"
 DOWNLOAD="https://github.com/potassco/clasp/releases/download/v3.3.4/clasp-3.3.4-source.tar.gz"
 MD5SUM="a2a4de570b39eb9a6ffdf949f632b619"
 DOWNLOAD_x86_64=""
